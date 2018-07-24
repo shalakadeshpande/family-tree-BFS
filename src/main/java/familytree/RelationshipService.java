@@ -182,31 +182,4 @@ public class RelationshipService {
 		return null;
 	}
 
-	// TODO remove
-	public String listSpouse(String personName, FamilyTree familyTree) {
-		Person matchedPerson = searchPerosnByName(personName, familyTree);
-		if (matchedPerson == null) {
-			matchedPerson = searchPerosnByWifeName(personName, familyTree);
-			return (matchedPerson == null) ? null : matchedPerson.getName();
-		}
-		return matchedPerson.getSpouseName();
-	}
-
-	// TODO remove
-	public List<Person> listChildren(String personName, FamilyTree familyTree) {
-		Map<Person, List<Person>> adjecency = getAdjecency(familyTree);
-		Person matchedPerson = searchPerosnByName(personName, familyTree);
-		if (matchedPerson == null) {
-			matchedPerson = searchPerosnByWifeName(personName, familyTree);
-		}
-		return (matchedPerson == null) ? null : adjecency.get(matchedPerson);
-	}
-	//
-	// public String getGrandMother(String personName) {
-	// String father = getFatherName(personName);
-	// if (father != null && !father.isEmpty()) {
-	// return getMotherName(father);
-	// }
-	// return null;
-	// }
 }
