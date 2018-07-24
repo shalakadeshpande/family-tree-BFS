@@ -1,5 +1,6 @@
 package familytree;
 
+import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -29,9 +30,33 @@ class RelationshipServiceTest {
 	}
 
 	@Test
+	void shouldTestGetFatherNameForOldestPersonInTree() {
+		String actual = this.service.getFatherName("Evan", this.familyTree);
+		assertEquals("Evan is oldest Person known in family tree", actual);
+	}
+
+	@Test
+	void shouldTestGetFatherNameWhenInvalidNameGiven() {
+		String actual = this.service.getFatherName("Evan123", this.familyTree);
+		assertNull(actual);
+	}
+
+	@Test
 	void shouldTestGetMotherName() {
 		String actual = this.service.getMotherName("Alex", this.familyTree);
 		assertEquals("Diana", actual);
+	}
+
+	@Test
+	void shouldTestGetMotherNameForOldestPersonInTree() {
+		String actual = this.service.getMotherName("Evan", this.familyTree);
+		assertEquals("Evan is oldest Person known in family tree", actual);
+	}
+
+	@Test
+	void shouldTestGetMotherNameWhenInvalidNameGiven() {
+		String actual = this.service.getMotherName("Evan123", this.familyTree);
+		assertNull(actual);
 	}
 
 	@Test
@@ -39,6 +64,12 @@ class RelationshipServiceTest {
 		Person actual = this.service.searchPerosnByWifeName("Diana", this.familyTree);
 		assertEquals("Diana", actual.getSpouseName());
 		assertEquals("Evan", actual.getName());
+	}
+
+	@Test
+	void shouldTestSearchPerosnByWifeNameForInvalidName() {
+		Person actual = this.service.searchPerosnByWifeName("Diana11", this.familyTree);
+		assertNull(actual);
 	}
 
 	@Test
@@ -57,6 +88,13 @@ class RelationshipServiceTest {
 
 		assertTrue(actual.containsAll(expected));
 	}
+	@Test
+	void shouldTestListBrothersWhenNobrothersExist() {
+		this.familyTree.addChild("Nancy", "Joy", "M");
+		List<String> actual = this.service.listBrothers("Joy", this.familyTree);
+
+		assertTrue(actual.isEmpty());
+	}
 
 	@Test
 	void shouldTestListSisters() {
@@ -66,6 +104,13 @@ class RelationshipServiceTest {
 		expected.add("Nisha");
 
 		assertTrue(actual.containsAll(expected));
+	}
+	@Test
+	void shouldTestListSistersWhenNoSistersExist() {
+		this.familyTree.addChild("Nancy", "Joy", "M");
+		List<String> actual = this.service.listSisters("Joy", this.familyTree);
+
+		assertTrue(actual.isEmpty());
 	}
 
 	@Test
@@ -134,7 +179,7 @@ class RelationshipServiceTest {
 		String actual = this.service.getGrandFather("Joy", this.familyTree);
 		assertEquals("Evan", actual);
 	}
-	
+
 	@Test
 	void shouldTestgetGrandMother() {
 		this.familyTree.addChild("Nancy", "Joy", "M");

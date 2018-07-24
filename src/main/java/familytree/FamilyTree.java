@@ -86,7 +86,7 @@ public class FamilyTree {
 		return "FamilyTree traversed as per BFS algorithm";
 	}
 
-	public void addSpouse(String personName, String spouseName) {
+	public boolean addSpouse(String personName, String spouseName) {
 
 		Person matchedPerson = relationshipService.searchPerosnByName(personName, this);
 		if (matchedPerson == null) {
@@ -94,25 +94,28 @@ public class FamilyTree {
 			if (matchedPerson != null) {
 				matchedPerson.setSpouseName(personName);
 				System.out.println("Welcome " + spouseName + "'s spouse to the family!" + personName);
+				return true;
 			} else {
 				System.out.println(
 						"Person not found! " + personName + " or " + spouseName + " needs to be added as child first.");
+				return false;
 			}
 		} else {
 			matchedPerson.setSpouseName(spouseName);
 			System.out.println("Welcome " + personName + "'s wife to the family!" + spouseName);
+			return true;
 		}
 
 	}
 
-	public void addChild(String personName, String childName, String gender) {
+	public boolean addChild(String personName, String childName, String gender) {
 		Person matchedPerson = relationshipService.searchPerosnByName(personName, this);
 		if (matchedPerson == null) {
 			matchedPerson = relationshipService.searchPerosnByWifeName(personName, this);
 		}
 		if (matchedPerson == null) {
 			System.out.println(personName + " needs to be added to family tree first!");
-			return;
+			return false;
 		}
 		List<Person> matchedPersonChildren = this.adjecency.get(matchedPerson);
 		if (matchedPersonChildren == null) {
@@ -122,6 +125,7 @@ public class FamilyTree {
 		this.adjecency.put(matchedPerson, matchedPersonChildren);
 
 		System.out.println("Welcome " + personName + "'s child to the family - " + childName);
+		return true;
 	}
 
 	public String getFatherName(String personName) {
