@@ -1,23 +1,17 @@
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
 import familytree.FamilyTree;
-import model.Person;
 import model.Relations;
 
 public class Application {
 	public static void main(String[] args) throws IOException {
-		familyTreeApp();
+		runFamilyTreeApp();
 	}
 	
-	private static void familyTreeApp() {
+	private static void runFamilyTreeApp() {
 		FamilyTree familyTree = new FamilyTree();
-		init(familyTree);
+		familyTree.init();
 
 		String userChoice = "0";
 		while (!userChoice.equals("4")) {
@@ -64,19 +58,19 @@ public class Application {
 					System.out.println(relation + "=" + familyTree.getMotherName(personName));
 					break;
 				case "brothers":
-					System.out.println(relation + "=" + familyTree.getBrothers(personName));
+					System.out.println(relation + "=" + familyTree.listBrothers(personName));
 					break;
 				case "sisters":
-					System.out.println(relation + "=" + familyTree.getSisters(personName));
+					System.out.println(relation + "=" + familyTree.listSisters(personName));
 					break;
 				case "sons":
-					System.out.println(relation + "=" + familyTree.getSons(personName));
+					System.out.println(relation + "=" + familyTree.listSons(personName));
 					break;
 				case "daughters":
-					System.out.println(relation + "=" + familyTree.getDaughters(personName));
+					System.out.println(relation + "=" + familyTree.listDaughters(personName));
 					break;
 				case "cousins":
-					System.out.println(relation + "=" + familyTree.getCousins(personName));
+					System.out.println(relation + "=" + familyTree.listCousins(personName));
 					break;
 				case "aunt":
 					System.out.println(relation + "=" + familyTree.getAunt(personName));
@@ -105,31 +99,4 @@ public class Application {
 		System.out.println("Terminated.");
 	}
 
-	private static void init(FamilyTree familyTree) {
-
-		Person root = new Person("Evan", "M");
-		root.setSpouseName("Diana");
-
-		Map<Person, List<Person>> rootAdjList = new HashMap<>();
-		rootAdjList.put(null, Arrays.asList(root));
-
-		List<Person> children = new ArrayList<>();
-		Person child1 = new Person("Alex", "M");
-		child1.setSpouseName("Nancy");
-		Person child2 = new Person("John", "M");
-		child2.setSpouseName("Niki");
-		Person child3 = new Person("Joe", "M");
-		Person child4 = new Person("Nisha", "F");
-
-		children.add(child1);
-		children.add(child2);
-		children.add(child3);
-		children.add(child4);
-
-		rootAdjList.put(root, children);
-		familyTree.setAdjecency(rootAdjList);
-
-		System.out.println("Initial tree - ");
-		familyTree.printTree();
-	}
 }
