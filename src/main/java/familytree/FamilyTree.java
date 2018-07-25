@@ -9,9 +9,20 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
+import model.Constants;
 import model.Person;
 
 public class FamilyTree {
+	private Map<Person, List<Person>> adjecency = new HashMap<>();
+
+	public Map<Person, List<Person>> getAdjecency() {
+		return adjecency;
+	}
+
+	public void setAdjecency(Map<Person, List<Person>> adjecency) {
+		this.adjecency = adjecency;
+	}
+
 	RelationshipService relationshipService;
 
 	public FamilyTree() {
@@ -57,16 +68,6 @@ public class FamilyTree {
 		}
 	}
 
-	private Map<Person, List<Person>> adjecency = new HashMap<>();
-
-	public Map<Person, List<Person>> getAdjecency() {
-		return adjecency;
-	}
-
-	public void setAdjecency(Map<Person, List<Person>> adjecency) {
-		this.adjecency = adjecency;
-	}
-
 	@Override
 	public String toString() {
 		Queue<Person> q = new LinkedList<>();
@@ -88,9 +89,9 @@ public class FamilyTree {
 
 	public boolean addSpouse(String personName, String spouseName) {
 
-		Person matchedPerson = relationshipService.searchPerosnByName(personName, this);
+		Person matchedPerson = relationshipService.searchPersonByName(personName, this);
 		if (matchedPerson == null) {
-			matchedPerson = relationshipService.searchPerosnByName(spouseName, this);
+			matchedPerson = relationshipService.searchPersonByName(spouseName, this);
 			if (matchedPerson != null) {
 				matchedPerson.setSpouseName(personName);
 				System.out.println("Welcome " + spouseName + "'s spouse to the family!" + personName);
@@ -109,10 +110,11 @@ public class FamilyTree {
 	}
 
 	public boolean addChild(String personName, String childName, String gender) {
-		Person matchedPerson = relationshipService.searchPerosnByName(personName, this);
-		if (matchedPerson == null) {
-			matchedPerson = relationshipService.searchPerosnByWifeName(personName, this);
-		}
+		Person matchedPerson = relationshipService.searchPersonByName(personName, this);
+		// if (matchedPerson == null) {
+		// matchedPerson = relationshipService.searchPersonByName(personName,
+		// this);
+		// }
 		if (matchedPerson == null) {
 			System.out.println(personName + " needs to be added to family tree first!");
 			return false;
@@ -129,27 +131,27 @@ public class FamilyTree {
 	}
 
 	public String getFatherName(String personName) {
-		return relationshipService.getFatherName(personName, this);
+		return relationshipService.getParentName(personName, Constants.FATHER, this);
 	}
 
 	public String getMotherName(String personName) {
-		return relationshipService.getMotherName(personName, this);
+		return relationshipService.getParentName(personName, "Mother", this);
 	}
 
 	public List<String> listBrothers(String personName) {
-		return relationshipService.listBrothers(personName, this);
+		return relationshipService.listSiblingsByType(personName, "brothers", this);
 	}
 
 	public List<String> listSisters(String personName) {
-		return relationshipService.listSisters(personName, this);
+		return relationshipService.listSiblingsByType(personName, "sisters", this);
 	}
 
 	public List<String> listSons(String personName) {
-		return relationshipService.listSons(personName, this);
+		return relationshipService.listChildren(personName, "sons", this);
 	}
 
 	public List<String> listDaughters(String personName) {
-		return relationshipService.listDaughters(personName, this);
+		return relationshipService.listChildren(personName, "daughters", this);
 	}
 
 	public List<String> listCousins(String personName) {
@@ -157,19 +159,19 @@ public class FamilyTree {
 	}
 
 	public List<String> getAunt(String personName) {
-		return relationshipService.getAunt(personName, this);
+		return relationshipService.getCousinParent(personName, "aunt", this);
 	}
 
 	public List<String> getUncle(String personName) {
-		return relationshipService.getUncle(personName, this);
+		return relationshipService.getCousinParent(personName, "uncle", this);
 	}
 
 	public String getGrandFather(String personName) {
-		return relationshipService.getGrandFather(personName, this);
+		return relationshipService.getGrandParents(personName, "grandfather", this);
 	}
 
 	public String getGrandMother(String personName) {
-		return relationshipService.getGrandMother(personName, this);
+		return relationshipService.getGrandParents(personName, "grandmother", this);
 	}
 
 }

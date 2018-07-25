@@ -1,22 +1,25 @@
 package familytree;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 
 import model.Person;
 
-class FamilyTreeTest {
+public class FamilyTreeTest {
 	FamilyTree familyTree;
 
-	@BeforeEach
+	@Before
 	public void setUp() {
 		familyTree = new FamilyTree();
 	}
 
 	@Test
-	void shouldTestInit() {
+	public void shouldTestInit() {
 		familyTree.init();
 		String outputString = familyTree.toString();
 		assertNotNull(familyTree.getAdjecency());
@@ -24,7 +27,7 @@ class FamilyTreeTest {
 	}
 
 	@Test
-	void shouldTestAddSpouse() {
+	public void shouldTestAddSpouse() {
 		familyTree.init();
 		RelationshipService mockService = new RelationShipServiceMock();
 		familyTree.setRelationshilService(mockService);
@@ -37,7 +40,7 @@ class FamilyTreeTest {
 
 	}
 	@Test
-	void shouldTestAddSpouseForNull() {
+	public void shouldTestAddSpouseForNull() {
 		familyTree.init();
 		RelationshipService mockService = new RelationShipServiceNullResponseMock();
 		familyTree.setRelationshilService(mockService);
@@ -48,7 +51,7 @@ class FamilyTreeTest {
 	}
 
 	@Test
-	void shouldTestAddChildByFathersName() {
+	public void shouldTestAddChildByFathersName() {
 		familyTree.init();
 		RelationshipService mockService = new RelationShipServiceMock();
 		familyTree.setRelationshilService(mockService);
@@ -59,7 +62,7 @@ class FamilyTreeTest {
 	}
 	
 	@Test
-	void shouldTestAddChildByMothersName() {
+	public void shouldTestAddChildByMothersName() {
 		familyTree.init();
 		RelationshipService mockService = new RelationShipServiceNullResponseMock();
 		familyTree.setRelationshilService(mockService);
@@ -72,14 +75,14 @@ class FamilyTreeTest {
 }
 
 class RelationShipServiceMock extends RelationshipService {
-	public Person searchPerosnByName(String personName, FamilyTree familyTree) {
+	public Person searchPersonByName(String personName, FamilyTree familyTree) {
 		return new Person("dummy", "M");
 
 	}
 }
 
 class RelationShipServiceNullResponseMock extends RelationshipService {
-	public Person searchPerosnByName(String personName, FamilyTree familyTree) {
+	public Person searchPersonByName(String personName, FamilyTree familyTree) {
 		return null;
 
 	}

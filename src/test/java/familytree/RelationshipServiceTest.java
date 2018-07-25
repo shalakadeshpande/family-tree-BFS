@@ -1,22 +1,22 @@
 package familytree;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 
 import model.Person;
 
-class RelationshipServiceTest {
+public class RelationshipServiceTest {
 	FamilyTree familyTree;
 	RelationshipService service;
 
-	@BeforeEach
+	@Before
 	public void setUp() {
 		this.service = new RelationshipService();
 		this.familyTree = new FamilyTree();
@@ -24,63 +24,50 @@ class RelationshipServiceTest {
 	}
 
 	@Test
-	void shouldTestGetFatherName() {
-		String actual = this.service.getFatherName("Alex", this.familyTree);
+	public void shouldTestGetFatherName() {
+		String actual = this.service.getParentName("Alex", "Father", this.familyTree);
 		assertEquals("Evan", actual);
 	}
 
 	@Test
-	void shouldTestGetFatherNameForOldestPersonInTree() {
-		String actual = this.service.getFatherName("Evan", this.familyTree);
-		assertEquals("Evan is oldest Person known in family tree", actual);
+	public void shouldTestGetFatherNameForOldestPersonInTree() {
+		String actual = this.service.getParentName("Evan", "Father", this.familyTree);
+		assertEquals(null, actual);
 	}
 
 	@Test
-	void shouldTestGetFatherNameWhenInvalidNameGiven() {
-		String actual = this.service.getFatherName("Evan123", this.familyTree);
+	public void shouldTestGetFatherNameWhenInvalidNameGiven() {
+		String actual = this.service.getParentName("Evan123", "Father", this.familyTree);
 		assertNull(actual);
 	}
 
 	@Test
-	void shouldTestGetMotherName() {
-		String actual = this.service.getMotherName("Alex", this.familyTree);
+	public void shouldTestGetMotherName() {
+		String actual = this.service.getParentName("Alex", "Mother", this.familyTree);
 		assertEquals("Diana", actual);
 	}
 
 	@Test
-	void shouldTestGetMotherNameForOldestPersonInTree() {
-		String actual = this.service.getMotherName("Evan", this.familyTree);
-		assertEquals("Evan is oldest Person known in family tree", actual);
-	}
-
-	@Test
-	void shouldTestGetMotherNameWhenInvalidNameGiven() {
-		String actual = this.service.getMotherName("Evan123", this.familyTree);
+	public void shouldTestGetMotherNameForOldestPersonInTree() {
+		String actual = this.service.getParentName("Evan", "Mother", this.familyTree);
 		assertNull(actual);
 	}
 
 	@Test
-	void shouldTestSearchPerosnByWifeName() {
-		Person actual = this.service.searchPerosnByWifeName("Diana", this.familyTree);
-		assertEquals("Diana", actual.getSpouseName());
-		assertEquals("Evan", actual.getName());
-	}
-
-	@Test
-	void shouldTestSearchPerosnByWifeNameForInvalidName() {
-		Person actual = this.service.searchPerosnByWifeName("Diana11", this.familyTree);
+	public void shouldTestGetMotherNameWhenInvalidNameGiven() {
+		String actual = this.service.getParentName("Evan123", "Mother", this.familyTree);
 		assertNull(actual);
 	}
 
 	@Test
-	void shouldTestSearchPerosnByName() {
-		Person actual = this.service.searchPerosnByName("Evan", this.familyTree);
+	public void shouldTestSearchPerosnByName() {
+		Person actual = this.service.searchPersonByName("Evan", this.familyTree);
 		assertEquals("Evan", actual.getName());
 	}
 
 	@Test
-	void shouldTestListBrothers() {
-		List<String> actual = this.service.listBrothers("Alex", this.familyTree);
+	public void shouldTestListBrothers() {
+		List<String> actual = this.service.listSiblingsByType("Alex", "brothers", this.familyTree);
 		assertEquals(2, actual.size());
 		List<String> expected = new ArrayList<>();
 		expected.add("John");
@@ -88,34 +75,36 @@ class RelationshipServiceTest {
 
 		assertTrue(actual.containsAll(expected));
 	}
+
 	@Test
-	void shouldTestListBrothersWhenNobrothersExist() {
+	public void shouldTestListBrothersWhenNobrothersExist() {
 		this.familyTree.addChild("Nancy", "Joy", "M");
-		List<String> actual = this.service.listBrothers("Joy", this.familyTree);
+		List<String> actual = this.service.listSiblingsByType("Joy", "brothers", this.familyTree);
 
 		assertTrue(actual.isEmpty());
 	}
 
 	@Test
-	void shouldTestListSisters() {
-		List<String> actual = this.service.listSisters("Alex", this.familyTree);
+	public void shouldTestListSisters() {
+		List<String> actual = this.service.listSiblingsByType("Alex", "sisters", this.familyTree);
 		assertEquals(1, actual.size());
 		List<String> expected = new ArrayList<>();
 		expected.add("Nisha");
 
 		assertTrue(actual.containsAll(expected));
 	}
+
 	@Test
-	void shouldTestListSistersWhenNoSistersExist() {
+	public void shouldTestListSistersWhenNoSistersExist() {
 		this.familyTree.addChild("Nancy", "Joy", "M");
-		List<String> actual = this.service.listSisters("Joy", this.familyTree);
+		List<String> actual = this.service.listSiblingsByType("Joy", "sisters", this.familyTree);
 
 		assertTrue(actual.isEmpty());
 	}
 
 	@Test
-	void shouldTestListSons() {
-		List<String> actual = this.service.listSons("Evan", this.familyTree);
+	public void shouldTestListSons() {
+		List<String> actual = this.service.listChildren("Evan", "sons", this.familyTree);
 		assertEquals(3, actual.size());
 		List<String> expected = new ArrayList<>();
 		expected.add("John");
@@ -126,8 +115,8 @@ class RelationshipServiceTest {
 	}
 
 	@Test
-	void shouldTestlistDaughters() {
-		List<String> actual = this.service.listDaughters("Evan", this.familyTree);
+	public void shouldTestlistDaughters() {
+		List<String> actual = this.service.listChildren("Evan", "daughters", this.familyTree);
 		assertEquals(1, actual.size());
 		List<String> expected = new ArrayList<>();
 		expected.add("Nisha");
@@ -136,7 +125,7 @@ class RelationshipServiceTest {
 	}
 
 	@Test
-	void shouldTestListCousins() {
+	public void shouldTestListCousins() {
 		this.familyTree.addChild("Nancy", "Joy", "M");
 		this.familyTree.addChild("Niki", "smilie", "F");
 		List<String> actual = this.service.listCousins("Joy", this.familyTree);
@@ -148,10 +137,10 @@ class RelationshipServiceTest {
 	}
 
 	@Test
-	void shouldTestGetAunt() {
+	public void shouldTestGetAunt() {
 		this.familyTree.addChild("Nancy", "Joy", "M");
 		this.familyTree.addChild("Niki", "smilie", "F");
-		List<String> actual = this.service.getAunt("Joy", this.familyTree);
+		List<String> actual = this.service.getCousinParent("Joy", "aunt", this.familyTree);
 		assertEquals(1, actual.size());
 		List<String> expected = new ArrayList<>();
 		expected.add("Nisha");
@@ -160,10 +149,10 @@ class RelationshipServiceTest {
 	}
 
 	@Test
-	void shouldTestGetUncle() {
+	public void shouldTestGetUncle() {
 		this.familyTree.addChild("Nancy", "Joy", "M");
 		this.familyTree.addChild("Niki", "smilie", "F");
-		List<String> actual = this.service.getUncle("Joy", this.familyTree);
+		List<String> actual = this.service.getCousinParent("Joy", "uncle", this.familyTree);
 		assertEquals(2, actual.size());
 		List<String> expected = new ArrayList<>();
 		expected.add("John");
@@ -173,18 +162,18 @@ class RelationshipServiceTest {
 	}
 
 	@Test
-	void shouldTestGetGrandFather() {
+	public void shouldTestGetGrandFather() {
 		this.familyTree.addChild("Nancy", "Joy", "M");
 		this.familyTree.addChild("Niki", "smilie", "F");
-		String actual = this.service.getGrandFather("Joy", this.familyTree);
+		String actual = this.service.getGrandParents("Joy", "grandfather", this.familyTree);
 		assertEquals("Evan", actual);
 	}
 
 	@Test
-	void shouldTestgetGrandMother() {
+	public void shouldTestgetGrandMother() {
 		this.familyTree.addChild("Nancy", "Joy", "M");
 		this.familyTree.addChild("Niki", "smilie", "F");
-		String actual = this.service.getGrandMother("Joy", this.familyTree);
+		String actual = this.service.getGrandParents("Joy", "grandmother", this.familyTree);
 		assertEquals("Diana", actual);
 	}
 

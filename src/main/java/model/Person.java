@@ -1,6 +1,7 @@
 package model;
 
 public class Person {
+	//TODO equals and hashcode override
 	private String name;
 	private String gender;
 	private String spouseName;
