@@ -40,14 +40,10 @@ public class SpouseTreeService implements ITreeService {
 		Scanner scanner = new Scanner(System.in);
 		String husbandName;
 		String wifeName;
-		try {
-			System.out.println("Enter husband name");
-			husbandName = scanner.nextLine();
-			System.out.println("Enter wife name");
-			wifeName = scanner.nextLine();
-		} finally {
-			scanner.close();
-		}
+		System.out.println("Enter husband name");
+		husbandName = scanner.nextLine();
+		System.out.println("Enter wife name");
+		wifeName = scanner.nextLine();
 		return this.addSpouse(tree, husbandName, wifeName);
 
 	}

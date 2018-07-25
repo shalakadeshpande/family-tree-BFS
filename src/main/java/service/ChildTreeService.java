@@ -42,16 +42,12 @@ public class ChildTreeService implements ITreeService {
 		String childName;
 		String gender;
 		String motherName;
-		try {
-			System.out.println("Enter child name");
-			childName = scanner.nextLine();
-			System.out.println("Enter child gender");
-			gender = scanner.nextLine();
-			System.out.println("Enter Mother name");
-			motherName = scanner.nextLine();
-		} finally {
-			scanner.close();
-		}
+		System.out.println("Enter child name");
+		childName = scanner.nextLine();
+		System.out.println("Enter child gender");
+		gender = scanner.nextLine();
+		System.out.println("Enter Mother name");
+		motherName = scanner.nextLine();
 		return this.addChild(tree, motherName, childName, gender);
 
 	}

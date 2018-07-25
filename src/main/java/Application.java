@@ -16,31 +16,28 @@ public class Application {
 		TreeUtil.init(tree);
 		Scanner scanner = new Scanner(System.in);
 
-		try {
-			int userChoice = 0;
-			while (userChoice != 4) {
-				System.out.println("---------------------");
-				System.out.println("Select operation : ->");
-				System.out.println("1 Add Child ");
-				System.out.println("2 Add Spouse ");
-				System.out.println("3 Get Relations ");
-				System.out.println("4 Exit");
-				System.out.println("Please enter your choice: ");
+		String userChoice = "0";
+		while (!"4".equals(userChoice)) {
+			System.out.println("---------------------");
+			System.out.println("Select operation : ->");
+			System.out.println("1 Add Child ");
+			System.out.println("2 Add Spouse ");
+			System.out.println("3 Get Relations ");
+			System.out.println("4 Exit");
+			System.out.println("Please enter your choice: ");
 
-				userChoice = scanner.nextInt();
+			userChoice = scanner.nextLine();
 
-				if (4 != userChoice) {
+			if (!"4".equals(userChoice)) {
 
-					ITreeService service = TreeServiceFactory.getServiceInstance(userChoice);
+				ITreeService service = TreeServiceFactory.getServiceInstance(userChoice);
 
-					service.process(tree);
-				}
-
+				service.process(tree);
 			}
-			System.out.println("Terminated.");
-		} finally {
-			scanner.close();
+
 		}
+		System.out.println("Terminated.");
+		// scanner.close();
 	}
 
 }
