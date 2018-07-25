@@ -133,6 +133,9 @@ public class TreeUtil {
 	private List<Person> getAllSiblings(String personName, FamilyTree familyTree) {
 		Map<Person, List<Person>> adjecency = familyTree.getParentChildMap();
 		String father = getParentName(personName, Constants.FATHER, familyTree);
+		if (father == null) {
+			return Collections.emptyList();
+		}
 		Person personObj = searchPersonByName(father, familyTree);
 		return adjecency.get(personObj);
 	}
