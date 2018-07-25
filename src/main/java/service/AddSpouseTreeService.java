@@ -13,7 +13,7 @@ public class AddSpouseTreeService implements ITreeService {
 		this.treeUtil = new TreeUtil();
 	}
 
-	private boolean addSpouse(FamilyTree tree, String personName, String spouseName) {
+	boolean addSpouse(FamilyTree tree, String personName, String spouseName) {
 
 		Person matchedPerson = treeUtil.searchPersonByName(personName, tree);
 		if (matchedPerson == null) {
@@ -36,15 +36,13 @@ public class AddSpouseTreeService implements ITreeService {
 	}
 
 	@Override
-	public void process(FamilyTree tree) {
+	public boolean process(FamilyTree tree) {
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Enter husband name");
 		String husbandName = scanner.nextLine();
 		System.out.println("Enter wife name");
 		String wifeName = scanner.nextLine();
-		this.addSpouse(tree, husbandName, wifeName);
-		System.out.println("updated tree: ");
-		treeUtil.printTree(tree);
+		return this.addSpouse(tree, husbandName, wifeName);
 
 	}
 

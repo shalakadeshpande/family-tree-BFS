@@ -16,7 +16,7 @@ public class QueryTreeService implements ITreeService {
 	}
 
 	@Override
-	public void process(FamilyTree tree) {
+	public boolean process(FamilyTree tree) {
 
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Enter person name");
@@ -24,6 +24,7 @@ public class QueryTreeService implements ITreeService {
 		System.out.println("Enter relation");
 		String relation = scanner.nextLine();
 		System.out.println("Person=" + personName + " relation=" + relation);
+		boolean status = true;
 		switch (relation) {
 
 		case "father":
@@ -60,6 +61,7 @@ public class QueryTreeService implements ITreeService {
 			System.out.println(relation + "=" + treeUtil.getGrandParents(personName, Constants.GRANDMOTHER, tree));
 			break;
 		default:
+			status = false;
 			System.out.println(relation + " is not known.");
 			System.out.println("Allowed relations are : ");
 			for (Relations eachRel : Relations.values()) {
@@ -67,7 +69,7 @@ public class QueryTreeService implements ITreeService {
 			}
 			break;
 		}
-
+		return status;
 	}
 
 }

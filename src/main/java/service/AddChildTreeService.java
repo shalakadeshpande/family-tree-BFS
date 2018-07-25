@@ -15,7 +15,7 @@ public class AddChildTreeService implements ITreeService {
 		this.treeUtil = new TreeUtil();
 	}
 
-	private boolean addChild(FamilyTree tree, String personName, String childName, String gender) {
+	boolean addChild(FamilyTree tree, String personName, String childName, String gender) {
 		Person matchedPerson = treeUtil.searchPersonByName(personName, tree);
 		if (matchedPerson == null) {
 			System.out.println(personName + " needs to be added to family tree first!");
@@ -29,11 +29,14 @@ public class AddChildTreeService implements ITreeService {
 		tree.getParentChildMap().put(matchedPerson, matchedPersonChildren);
 
 		System.out.println("Welcome " + personName + "'s child to the family - " + childName);
+		
+		System.out.println("updated tree: ");
+		TreeUtil.printTree(tree);
 		return true;
 	}
 
 	@Override
-	public void process(FamilyTree tree) {
+	public boolean process(FamilyTree tree) {
 		Scanner scanner = new Scanner(System.in);
 
 		System.out.println("Enter child name");
@@ -42,9 +45,8 @@ public class AddChildTreeService implements ITreeService {
 		String gender = scanner.nextLine();
 		System.out.println("Enter Mother name");
 		String motherName = scanner.nextLine();
-		this.addChild(tree, motherName, childName, gender);
-		System.out.println("updated tree: ");
-		TreeUtil.printTree(tree);
+		return this.addChild(tree, motherName, childName, gender);
+		
 	}
 
 }
