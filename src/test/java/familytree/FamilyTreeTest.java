@@ -8,6 +8,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
+import model.FamilyTree;
 import model.Person;
 
 public class FamilyTreeTest {
@@ -22,7 +23,7 @@ public class FamilyTreeTest {
 	public void shouldTestInit() {
 		familyTree.init();
 		String outputString = familyTree.toString();
-		assertNotNull(familyTree.getAdjecency());
+		assertNotNull(familyTree.getParentChildMap());
 		assertEquals(outputString, "FamilyTree traversed as per BFS algorithm");
 	}
 

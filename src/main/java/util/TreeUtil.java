@@ -1,20 +1,43 @@
-package familytree;
+package util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import model.Constants;
+import model.FamilyTree;
 import model.Person;
 
-public class RelationshipService {
+public class TreeUtil {
+	public static void printTree(FamilyTree familyTree) {
+		Set<Person> keys = familyTree.getParentChildMap().keySet();
+		for (Person key : keys) {
+			System.out.println(key + " : " + familyTree.getParentChildMap().get(key));
+		}
+	}
+
+	public Person searchPersonByName(String personName, FamilyTree familyTree) {
+		Map<Person, List<Person>> adjecency = familyTree.getParentChildMap();
+		Set<Person> allPersonNodes = adjecency.keySet();
+		for (Person person : allPersonNodes) {
+			List<Person> allChildren = adjecency.get(person);
+			List<Person> matched = allChildren.stream().filter(each -> personName.equalsIgnoreCase(each.getName())
+					|| personName.equalsIgnoreCase(each.getSpouseName())).collect(Collectors.toList());
+			if (null != matched && !matched.isEmpty())
+				return matched.get(0);
+		}
+
+		return null;
+	}
 
 	public String getParentName(String personName, String type, FamilyTree familyTree) {
 		Person parent = null;
-		Map<Person, List<Person>> adjecency = getAdjecency(familyTree);
+		Map<Person, List<Person>> adjecency = familyTree.getParentChildMap();// (familyTree);
 		Set<Person> allPersonNodes = adjecency.keySet();
 		for (Person person : allPersonNodes) {
 			List<String> allChildrenNames = adjecency.get(person).stream().map(Person::getName)
@@ -28,24 +51,6 @@ public class RelationshipService {
 			return Constants.FATHER.equalsIgnoreCase(type) ? parent.getName() : parent.getSpouseName();
 
 		}
-		return null;
-	}
-
-	private Map<Person, List<Person>> getAdjecency(FamilyTree familyTree) {
-		return familyTree.getAdjecency();
-	}
-
-	public Person searchPersonByName(String personName, FamilyTree familyTree) {
-		Map<Person, List<Person>> adjecency = getAdjecency(familyTree);
-		Set<Person> allPersonNodes = adjecency.keySet();
-		for (Person person : allPersonNodes) {
-			List<Person> allChildren = adjecency.get(person);
-			List<Person> matched = allChildren.stream().filter(each -> personName.equalsIgnoreCase(each.getName())
-					|| personName.equalsIgnoreCase(each.getSpouseName())).collect(Collectors.toList());
-			if (null != matched && !matched.isEmpty())
-				return matched.get(0);
-		}
-
 		return null;
 	}
 
@@ -67,7 +72,7 @@ public class RelationshipService {
 
 	public List<String> listChildren(String personName, String childrenType, FamilyTree familyTree) {
 		String gender = "sons".equalsIgnoreCase(childrenType) ? "M" : "F";
-		Map<Person, List<Person>> adjecency = getAdjecency(familyTree);
+		Map<Person, List<Person>> adjecency = familyTree.getParentChildMap();
 		Person personObj = searchPersonByName(personName, familyTree);
 		if (personObj == null) {
 			System.out.println(personName + " Not found! first add as child to family tree.");
@@ -81,15 +86,8 @@ public class RelationshipService {
 		return Collections.emptyList();
 	}
 
-	private List<Person> getAllSiblings(String personName, FamilyTree familyTree) {
-		Map<Person, List<Person>> adjecency = getAdjecency(familyTree);
-		String father = getParentName(personName, Constants.FATHER, familyTree);
-		Person personObj = searchPersonByName(father, familyTree);
-		return adjecency.get(personObj);
-	}
-
 	public List<String> listCousins(String personName, FamilyTree familytree) {
-		Map<Person, List<Person>> adjecency = getAdjecency(familytree);
+		Map<Person, List<Person>> adjecency = familytree.getParentChildMap();
 		List<String> cousins = new ArrayList<>();
 		String father = getParentName(personName, Constants.FATHER, familytree);
 		List<Person> fathersSiblings = getAllSiblings(father, familytree).stream()
@@ -107,7 +105,7 @@ public class RelationshipService {
 
 	public List<String> getCousinParent(String personName, String type, FamilyTree familyTree) {
 		String father = getParentName(personName, Constants.FATHER, familyTree);
-		List<Person> matchedParentList = new ArrayList<>();
+		List<Person> matchedParentList;// = new ArrayList<>();
 		if ("aunt".equalsIgnoreCase(type)) {
 			matchedParentList = getAllSiblings(father, familyTree).stream()
 					.filter(sibling -> sibling.getGender().equalsIgnoreCase("F")).collect(Collectors.toList());
@@ -129,4 +127,37 @@ public class RelationshipService {
 				: getParentName(father, Constants.FATHER, familyTree);
 	}
 
+	private List<Person> getAllSiblings(String personName, FamilyTree familyTree) {
+		Map<Person, List<Person>> adjecency = familyTree.getParentChildMap();
+		String father = getParentName(personName, Constants.FATHER, familyTree);
+		Person personObj = searchPersonByName(father, familyTree);
+		return adjecency.get(personObj);
+	}
+
+	public static void init(FamilyTree familytree) {
+		Person root = new Person("Evan", "M");
+		root.setSpouseName("Diana");
+
+		Map<Person, List<Person>> rootAdjList = new HashMap<>();
+		rootAdjList.put(null, Arrays.asList(root));
+
+		List<Person> children = new ArrayList<>();
+		Person child1 = new Person("Alex", "M");
+		child1.setSpouseName("Nancy");
+		Person child2 = new Person("John", "M");
+		child2.setSpouseName("Niki");
+		Person child3 = new Person("Joe", "M");
+		Person child4 = new Person("Nisha", "F");
+
+		children.add(child1);
+		children.add(child2);
+		children.add(child3);
+		children.add(child4);
+
+		rootAdjList.put(root, children);
+		familytree.setParentChildMap(rootAdjList);
+
+		System.out.println("Initial tree - ");
+		printTree(familytree);
+	}
 }
