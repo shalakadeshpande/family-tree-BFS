@@ -8,14 +8,14 @@ import model.FamilyTree;
 import model.Person;
 import util.TreeUtil;
 
-public class AddChildTreeService implements ITreeService {
+public class ChildTreeService implements ITreeService {
 	TreeUtil treeUtil;
 
-	public AddChildTreeService() {
+	public ChildTreeService() {
 		this.treeUtil = new TreeUtil();
 	}
 
-	boolean addChild(FamilyTree tree, String personName, String childName, String gender) {
+	protected boolean addChild(FamilyTree tree, String personName, String childName, String gender) {
 		Person matchedPerson = treeUtil.searchPersonByName(personName, tree);
 		if (matchedPerson == null) {
 			System.out.println(personName + " needs to be added to family tree first!");
@@ -29,7 +29,7 @@ public class AddChildTreeService implements ITreeService {
 		tree.getParentChildMap().put(matchedPerson, matchedPersonChildren);
 
 		System.out.println("Welcome " + personName + "'s child to the family - " + childName);
-		
+
 		System.out.println("updated tree: ");
 		TreeUtil.printTree(tree);
 		return true;
@@ -39,14 +39,21 @@ public class AddChildTreeService implements ITreeService {
 	public boolean process(FamilyTree tree) {
 		Scanner scanner = new Scanner(System.in);
 
-		System.out.println("Enter child name");
-		String childName = scanner.nextLine();
-		System.out.println("Enter child gender");
-		String gender = scanner.nextLine();
-		System.out.println("Enter Mother name");
-		String motherName = scanner.nextLine();
+		String childName;
+		String gender;
+		String motherName;
+		try {
+			System.out.println("Enter child name");
+			childName = scanner.nextLine();
+			System.out.println("Enter child gender");
+			gender = scanner.nextLine();
+			System.out.println("Enter Mother name");
+			motherName = scanner.nextLine();
+		} finally {
+			scanner.close();
+		}
 		return this.addChild(tree, motherName, childName, gender);
-		
+
 	}
 
 }

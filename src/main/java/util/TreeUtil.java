@@ -37,13 +37,14 @@ public class TreeUtil {
 
 	public String getParentName(String personName, String type, FamilyTree familyTree) {
 		Person parent = null;
-		Map<Person, List<Person>> adjecency = familyTree.getParentChildMap();// (familyTree);
+		Map<Person, List<Person>> adjecency = familyTree.getParentChildMap();
 		Set<Person> allPersonNodes = adjecency.keySet();
 		for (Person person : allPersonNodes) {
 			List<String> allChildrenNames = adjecency.get(person).stream().map(Person::getName)
 					.collect(Collectors.toList());
 			if (allChildrenNames.contains(personName)) {
 				parent = person;
+				break;
 			}
 
 		}
@@ -56,7 +57,7 @@ public class TreeUtil {
 
 	public List<String> listSiblingsByType(String personName, String siblingType, FamilyTree familyTree) {
 
-		String gender = "sisters".equalsIgnoreCase(siblingType) ? "F" : "M";
+		String gender = Constants.SISTERS.equalsIgnoreCase(siblingType) ? Constants.FEMALE : Constants.MALE;
 		List<Person> siblings = getAllSiblings(personName, familyTree);
 		if (siblings == null || siblings.isEmpty()) {
 			return Collections.emptyList();
@@ -71,7 +72,7 @@ public class TreeUtil {
 	}
 
 	public List<String> listChildren(String personName, String childrenType, FamilyTree familyTree) {
-		String gender = "sons".equalsIgnoreCase(childrenType) ? "M" : "F";
+		String gender = Constants.SONS.equalsIgnoreCase(childrenType) ? Constants.MALE : Constants.FEMALE;
 		Map<Person, List<Person>> adjecency = familyTree.getParentChildMap();
 		Person personObj = searchPersonByName(personName, familyTree);
 		if (personObj == null) {
@@ -105,13 +106,15 @@ public class TreeUtil {
 
 	public List<String> getCousinParent(String personName, String type, FamilyTree familyTree) {
 		String father = getParentName(personName, Constants.FATHER, familyTree);
-		List<Person> matchedParentList;// = new ArrayList<>();
-		if ("aunt".equalsIgnoreCase(type)) {
+		List<Person> matchedParentList;
+		if (Constants.AUNT.equalsIgnoreCase(type)) {
 			matchedParentList = getAllSiblings(father, familyTree).stream()
-					.filter(sibling -> sibling.getGender().equalsIgnoreCase("F")).collect(Collectors.toList());
+					.filter(sibling -> sibling.getGender().equalsIgnoreCase(Constants.FEMALE))
+					.collect(Collectors.toList());
 		} else {
-			matchedParentList = getAllSiblings(father, familyTree).stream().filter(
-					sibling -> sibling.getGender().equalsIgnoreCase("M") && !sibling.getName().equalsIgnoreCase(father))
+			matchedParentList = getAllSiblings(father, familyTree).stream()
+					.filter(sibling -> sibling.getGender().equalsIgnoreCase(Constants.MALE)
+							&& !sibling.getName().equalsIgnoreCase(father))
 					.collect(Collectors.toList());
 		}
 
@@ -123,7 +126,7 @@ public class TreeUtil {
 		if (father == null || father.isEmpty()) {
 			return null;
 		}
-		return "grandmother".equalsIgnoreCase(type) ? getParentName(father, "Mother", familyTree)
+		return Constants.GRANDMOTHER.equalsIgnoreCase(type) ? getParentName(father, Constants.MOTHER, familyTree)
 				: getParentName(father, Constants.FATHER, familyTree);
 	}
 
@@ -135,19 +138,19 @@ public class TreeUtil {
 	}
 
 	public static void init(FamilyTree familytree) {
-		Person root = new Person("Evan", "M");
+		Person root = new Person("Evan", Constants.MALE);
 		root.setSpouseName("Diana");
 
 		Map<Person, List<Person>> rootAdjList = new HashMap<>();
 		rootAdjList.put(null, Arrays.asList(root));
 
 		List<Person> children = new ArrayList<>();
-		Person child1 = new Person("Alex", "M");
+		Person child1 = new Person("Alex", Constants.MALE);
 		child1.setSpouseName("Nancy");
-		Person child2 = new Person("John", "M");
+		Person child2 = new Person("John", Constants.MALE);
 		child2.setSpouseName("Niki");
-		Person child3 = new Person("Joe", "M");
-		Person child4 = new Person("Nisha", "F");
+		Person child3 = new Person("Joe", Constants.MALE);
+		Person child4 = new Person("Nisha", Constants.FEMALE);
 
 		children.add(child1);
 		children.add(child2);

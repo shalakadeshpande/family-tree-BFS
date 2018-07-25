@@ -6,14 +6,14 @@ import model.FamilyTree;
 import model.Person;
 import util.TreeUtil;
 
-public class AddSpouseTreeService implements ITreeService {
+public class SpouseTreeService implements ITreeService {
 	TreeUtil treeUtil;
 
-	public AddSpouseTreeService() {
+	public SpouseTreeService() {
 		this.treeUtil = new TreeUtil();
 	}
 
-	boolean addSpouse(FamilyTree tree, String personName, String spouseName) {
+	protected boolean addSpouse(FamilyTree tree, String personName, String spouseName) {
 
 		Person matchedPerson = treeUtil.searchPersonByName(personName, tree);
 		if (matchedPerson == null) {
@@ -38,10 +38,16 @@ public class AddSpouseTreeService implements ITreeService {
 	@Override
 	public boolean process(FamilyTree tree) {
 		Scanner scanner = new Scanner(System.in);
-		System.out.println("Enter husband name");
-		String husbandName = scanner.nextLine();
-		System.out.println("Enter wife name");
-		String wifeName = scanner.nextLine();
+		String husbandName;
+		String wifeName;
+		try {
+			System.out.println("Enter husband name");
+			husbandName = scanner.nextLine();
+			System.out.println("Enter wife name");
+			wifeName = scanner.nextLine();
+		} finally {
+			scanner.close();
+		}
 		return this.addSpouse(tree, husbandName, wifeName);
 
 	}

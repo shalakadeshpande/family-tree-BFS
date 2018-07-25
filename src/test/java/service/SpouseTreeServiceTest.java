@@ -8,13 +8,13 @@ import org.junit.Test;
 import model.FamilyTree;
 import util.TreeUtil;
 
-public class AddSpouseTreeServiceTest {
-	AddSpouseTreeService service;
+public class SpouseTreeServiceTest {
+	SpouseTreeService service;
 	FamilyTree tree;
 
 	@Before
 	public void setUp() {
-		service = new AddSpouseTreeService();
+		service = new SpouseTreeService();
 		tree = new FamilyTree();
 		TreeUtil.init(tree);
 	}

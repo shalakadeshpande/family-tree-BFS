@@ -6,18 +6,14 @@ public class TreeServiceFactory {
 		//
 	}
 
-	public static ITreeService getService(String type) {
-		ITreeService service;
+	public static ITreeService getServiceInstance(int userChoice) {
 
-		if ("1".equalsIgnoreCase(type)) {
-			service = new AddChildTreeService();
-			return service;
-		} else if ("2".equalsIgnoreCase(type)) {
-			service = new AddSpouseTreeService();
-			return service;
-		} else if ("3".equalsIgnoreCase(type)) {
-			service = new QueryTreeService();
-			return service;
+		if (1 == userChoice) {
+			return new ChildTreeService();
+		} else if (2 == userChoice) {
+			return new SpouseTreeService();
+		} else if (3 == userChoice) {
+			return new QueryTreeService();
 		}
 		return null;
 	}

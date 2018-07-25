@@ -8,14 +8,14 @@ import org.junit.Test;
 import model.FamilyTree;
 import util.TreeUtil;
 
-public class AddChildTreeServiceTest {
+public class ChildTreeServiceTest {
 
-	private AddChildTreeService service;
+	private ChildTreeService service;
 	private FamilyTree tree;
 
 	@Before
 	public void setup() {
-		service = new AddChildTreeService();
+		service = new ChildTreeService();
 		tree = new FamilyTree();
 	}
 
